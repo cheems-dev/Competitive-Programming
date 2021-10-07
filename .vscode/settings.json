@@ -2,7 +2,8 @@
   "files.associations": {
     "*.js": "javascript",
     "iostream": "cpp",
-    "cstdio": "cpp"
+    "cstdio": "cpp",
+    "*.tcc": "cpp"
   },
   "C_Cpp.errorSquiggles": "Disabled"
 }
