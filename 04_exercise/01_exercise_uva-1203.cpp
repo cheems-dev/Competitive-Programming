@@ -1,35 +1,48 @@
-#include <cstdio>
-#include <queue>
-#include <utility>
-#include <cstring>
 #include <iostream>
-#include <functional>
+#include <stdio.h>
+#include <string>
+#include <map>
+#include <queue>
+#include <set>
+#include <iterator>
+#include <algorithm>
+
 using namespace std;
 
-int main()
+int main(int argc, char const *argv[])
 {
-  char s[20];
-  int qnum{0}, p{0}, n{0};
-  priority_queue<pair<int, pair<int, int>>,
-                 vector<pair<int, pair<int, int>>>,
-                 greater<pair<int, pair<int, int>>>>
-      pq;
+  int qNum, period, count = 0, i, k, show, first, line, aux;
+  string action;
+  map<int, int> registro;
+  pair<int, int> it;
+  priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
 
-  while (scanf("%s", s), strcmp("#", s))
+  while (1)
   {
-    cin >> qnum >> p;
-    pq.push(pair<int, pair<int, int>>(p, pair<int, int>(qnum, p)));
+    cin >> action;
+
+    if (action == "#")
+    {
+      break;
+    }
+    else
+    {
+      scanf(" %d %d\n", &qNum, &period);
+      registro.insert(pair<int, int>(qNum, period));
+      pq.push(make_pair(period, qNum));
+    }
   }
 
-  cin >> n;
-  while (n--)
-  {
-    pair<int, pair<int, int>> pr = pq.top();
-    pq.pop();
+  scanf("%d\n", &k);
 
-    cout << pr.second.first << endl;
-    pr.first += pr.second.second;
-    pq.push(pr);
+  while (k)
+  {
+    it = pq.top();
+    pq.pop();
+    cout << it.second << endl;
+    it.first += registro[it.second];
+    pq.push(it);
+    k--;
   }
 
   return 0;

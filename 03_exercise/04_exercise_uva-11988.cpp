@@ -1,34 +1,43 @@
-#include <cstdio>
-#include <list>
-#include <cstring>
+/*
+ * Anderson A. Fontana
+ * Uva 11988 - Broken Keyboard (a.k.a. Beiju Text)
+ */
+
 #include <iostream>
+#include <list>
+
 using namespace std;
 
 int main()
 {
-  char line[100001];
-  while (scanf("%s", line) != EOF)
+  list<char> out;
+  list<char>::iterator it;
+  string in;
+  while (getline(cin, in))
   {
-    list<char> l;
-    int len = strlen(line);
-    list<char>::iterator it = l.begin();
-
-    for (int i = 0; i < len; i++)
+    for (char c : in)
     {
-      if (line[i] == '[')
-        it = l.begin();
-      else if (line[i] == ']')
-        it = l.end();
+      if (c == '[' || c == ']')
+      {
+        if (out.empty())
+          continue;
+        if (c == '[')
+          it = out.begin();
+        else
+          it = out.end();
+      }
+      else if (out.empty())
+      {
+        out.push_back(c);
+        it = out.end();
+      }
       else
-        l.insert(it, line[i]);
+        out.insert(it, c);
     }
-
-    for (it = l.begin(); it != l.end(); it++)
-    {
-      printf("%c", *it);
-    }
+    for (auto i : out)
+      cout << i;
     cout << endl;
+    out.clear();
   }
-
   return 0;
 }

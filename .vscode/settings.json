@@ -3,7 +3,8 @@
     "*.js": "javascript",
     "iostream": "cpp",
     "cstdio": "cpp",
-    "*.tcc": "cpp"
+    "*.tcc": "cpp",
+    "ostream": "cpp"
   },
   "C_Cpp.errorSquiggles": "Disabled"
 }

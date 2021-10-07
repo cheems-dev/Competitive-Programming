@@ -1,88 +1,50 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 
-using namespace std;
+usign namespace std;
 
-class DisjointSet
+int dfs(const std::vector<std::vector<int>> &g, std::vector<bool> &visited, int k)
 {
-public:
-  int n;
-  int maxHeight;
-  vector<int> rank;
-  vector<int> height;
-  vector<int> parent;
-
-  DisjointSet(int _n) : n(_n), maxHeight(1), rank(_n), height(_n), parent(_n)
+  if (visited[k])
+    return 0;
+  else
   {
-    for (int i = 0; i < n; ++i)
-    {
-      rank[i] = 0;
-      height[i] = 1;
-      parent[i] = i;
-    }
+    visited[k] = true;
+    int size = 1;
+    for (int nb : g[k])
+      size += dfs(g, visited, nb);
+    return size;
   }
+}
 
-  inline int findParent(int element)
-  {
-    if (parent[element] == element)
-      return element;
-    return (parent[element] = findParent(parent[element]));
-  }
-
-  inline bool isSameSet(int element1, int element2)
-  {
-    return (findParent(element1) == findParent(element2));
-  }
-
-  inline void unionSet(int element1, int element2)
-  {
-    if (!isSameSet(element1, element2))
-    {
-      int x = findParent(element1);
-      int y = findParent(element2);
-
-      if (rank[x] < rank[y])
-      {
-        height[y] += height[x];
-        maxHeight = max(maxHeight, height[y]);
-        parent[x] = y;
-      }
-      else
-      {
-        height[x] += height[y];
-        maxHeight = max(maxHeight, height[x]);
-        parent[y] = x;
-        if (rank[x] == rank[y])
-          ++rank[x];
-      }
-    }
-  }
-};
-
-int main(void)
+int main()
 {
-  ios_base::sync_with_stdio(0);
-  cin.tie(0);
-
-  int testCases;
-  cin >> testCases;
-  while (testCases--)
+  int ncase;
+  cin >> ncase;
+  for (int i = 0; i < ncase; ++i)
   {
-    int m;
-    int n;
+    int n, m;
     cin >> n >> m;
-    DisjointSet people(n);
-
-    while (m--)
+    vector<vector<int>> g(n + 1);
+    vector<bool> visited(n + 1, false);
+    for (int j = 0; j < m; ++j)
     {
-      int a;
-      int b;
+      int a, b;
       cin >> a >> b;
-
-      people.unionSet(a - 1, b - 1);
+      g[a].push_back(b);
+      g[b].push_back(a);
     }
 
-    cout << people.maxHeight << "\n";
-  }
+    int maxsize = -1;
+    for (int k = 1; k <= n; ++k)
+    {
+      if (!visited[k])
+      {
+        int size = dfs(g, visited, k);
+        maxsize = max(size, maxsize);
+      }
+    }
 
-  return 0;
+    cout << maxsize << endl;
+  }
 }

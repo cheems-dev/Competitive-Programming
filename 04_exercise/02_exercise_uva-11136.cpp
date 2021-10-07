@@ -3,37 +3,44 @@
 
 using namespace std;
 
-int main()
+int main(void)
 {
-  int numDays{0};
-  while (cin >> numDays, numDays)
+  int n = 0;
+  while (true)
   {
-    multiset<int> numbers;
+    cin >> n;
 
-    long long cost = 0;
+    if (n == 0)
+      break;
 
-    while (numDays--)
+    multiset<int> num;
+
+    long long int totalPrice = 0;
+
+    for (int i = 0; i < n; ++i)
     {
-      int k;
+      int k = 0;
       cin >> k;
 
-      while (k--)
+      for (int j = 0; j < k; ++j)
       {
         int t;
         cin >> t;
 
-        numbers.insert(t);
+        num.insert(t);
       }
 
-      multiset<int>::iterator lowest = numbers.begin();
-      multiset<int>::iterator highest = --numbers.end();
+      int smallest = *num.begin();
+      num.erase(num.begin());
 
-      cost += (*highest - *lowest);
+      int biggest = *num.rbegin();
+      num.erase(--num.end());
 
-      numbers.erase(lowest);
-      numbers.erase(highest);
+      totalPrice += (biggest - smallest);
     }
 
-    cout << cost << endl;
+    cout << totalPrice << endl;
   }
+
+  return 0;
 }

@@ -1,43 +1,65 @@
+#include <iostream>
 
-#include <stdio.h>
-#include <vector>
 using namespace std;
-vector<int> g[30005];
-int used[30005], ret;
-void dfs(int x)
+
+const int MAXV = 30010;
+
+int parent[MAXV], ranks[MAXV];
+
+void makeSet(int n)
 {
-  ret++, used[x] = 1;
-  for (vector<int>::iterator it = g[x].begin();
-       it != g[x].end(); it++)
-  {
-    if (used[*it] == 0)
-    {
-      dfs(*it);
-    }
-  }
+  for (int i = 0; i < n; i++)
+    parent[i] = i, ranks[i] = 0;
 }
-int main()
+
+int findSet(int x)
 {
-  int n, m, k;
-  int i, j, x, y;
-  while (scanf("%d %d", &n, &m) == 2 && n)
+  return (x == parent[x] ? x : parent[x] = findSet(parent[x]));
+}
+
+bool unionSet(int x, int y)
+{
+  x = findSet(x), y = findSet(y);
+
+  if (x != y)
   {
-    for (i = 0; i <= n; i++)
-      g[i].clear(), used[i] = 0;
-    while (m--)
+    if (ranks[x] > ranks[y])
+      parent[y] = x;
+    else
     {
-      scanf("%d", &k);
-      scanf("%d", &x), k--;
-      while (k--)
+      parent[x] = y;
+      if (ranks[x] == ranks[y])
+        ranks[y]++;
+    }
+    return true;
+  }
+  return false;
+}
+
+int main(int argc, char *argv[])
+{
+
+  int n, m, k, z1, z2;
+  while (cin >> n >> m, n > 0)
+  {
+    makeSet(n);
+    for (int i = 1; i <= m; i++)
+    {
+      cin >> k >> z1;
+      for (int j = 2; j <= k; j++)
       {
-        scanf("%d", &y);
-        g[x].push_back(y);
-        g[y].push_back(x);
+        cin >> z2;
+        unionSet(z1, z2);
       }
     }
-    ret = 0;
-    dfs(0);
-    printf("%d\n", ret);
+
+    int cnt = 0;
+    for (int i = 0; i < n; i++)
+      if (findSet(i) == findSet(0))
+        cnt++;
+
+    cout << cnt << '\n';
   }
+
   return 0;
 }
